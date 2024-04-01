@@ -4,9 +4,9 @@
       <!-- <div class="container-title">Review</div> -->
       <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
-          <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div>
-          <div v-else>{{ voter.account }}</div>
-          <div>{{ voter.stakeOf | WTON | withComma }} TON Staked</div>
+          <!-- <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div> -->
+          <div :style="{color:'#2a72e5'}">{{ voter.user.id | hexSlicer }}</div>
+          <div>{{ roundNumber(calcPct(voter.stakeOf, sumOfVotes)) }}% ({{ voter.stakeOf | WTON | withComma }} TON) </div>
         </div>
         <vote-poll class="vote-poll"
                    :pct="calcPct(voter.stakeOf, sumOfVotes)"
@@ -67,6 +67,15 @@ export default {
     },
     calcPct () {
       return (vote, totalVotes) => Number(vote * 100 / totalVotes);
+    },
+    roundNumber () {
+      return pct => {
+        if (isNaN (pct) === false && Number.isInteger(pct) === false) {
+          return pct.toFixed(2);
+        } else {
+          return pct;
+        }
+      };
     },
   },
   methods: {

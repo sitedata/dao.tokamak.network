@@ -1,6 +1,13 @@
 <template>
   <div class="modal-update-reward">
-    <div class="label-update-reward">You can get {{ expectedSeig | withComma }} TON reward</div>
+    <div class="label-update-reward">
+      You can get
+      <div v-if="loading" class="dot-flashing"></div>
+      <div v-else :style="{margin: '0px 6px'}">
+        {{ expectedSeig | withComma }}
+      </div>
+      TON reward
+    </div>
     <div class="label">Do you want to continue?</div>
     <div class="button-container">
       <update-button :name="'Update'"
@@ -38,6 +45,7 @@ export default {
     return {
       address: '',
       expectedSeig: '0',
+      loading: true,
     };
   },
   computed: {
@@ -119,6 +127,7 @@ export default {
         );
 
         this.expectedSeig = WTON(expectedSeig);
+        this.loading = false;
       } catch (e) {
         console.log(e); // eslint-disable-line
       }
@@ -253,10 +262,61 @@ export default {
     letter-spacing: normal;
     text-align: center;
     color: #3e495c;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
     padding-top: 45px;
 
     margin-bottom: 15px;
+  }
+
+  .dot-flashing {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    top: 15px;
+    border-radius: 5px;
+    margin: 0px 25px;
+    background-color: #3e495c;
+    color: #3e495c;
+    animation: dot-flashing 1s infinite linear alternate;
+    animation-delay: 0.5s;
+  }
+  .dot-flashing::before, .dot-flashing::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+  .dot-flashing::before {
+    left: -15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #3e495c;
+    color: #3e495c;
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 0s;
+  }
+  .dot-flashing::after {
+    left: 15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #3e495c;
+    color: #3e495c;
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 1s;
+  }
+
+  @keyframes dot-flashing {
+    0% {
+      background-color: #3e495c;
+    }
+    50%, 100% {
+      background-color: rgba(152, 128, 255, 0.2);
+    }
   }
 
   .label {

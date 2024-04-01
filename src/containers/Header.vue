@@ -57,7 +57,7 @@
               selected: $route.path.includes('election'),
             }"
           >
-            Election
+            DAO Candidates
           </router-link>
           <router-link
             :to="'/propose'"
@@ -78,7 +78,7 @@
               selected: $route.path.includes('agenda'),
             }"
           >
-            Committee
+            Agenda
           </router-link>
         </div>
       </div>
