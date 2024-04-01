@@ -9,6 +9,7 @@ const daoVaultFunctionsOfTypeA = [
 //     'name': 'approveTON',
 //     'title': '(DAO Vault)Permission to transfer the TON stored in DAO Vault will be granted. ',
 //     'prettyName': '',
+// 'disabled': false,
 //     'explanation':
 // `Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
 // Through this function, you can grant permission to transfer the TON stored in DAO Vault to a specific address in a specific amount.`,
@@ -23,6 +24,7 @@ const daoVaultFunctionsOfTypeA = [
 //     'name': 'approveWTON',
 //     'title': '(DAO Vault)Permission to transfer the WTON stored in DAO Vault will be granted. ',
 //     'prettyName': '',
+// 'disabled': false,
 //     'explanation':
 // `Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing them.
 // Through this function, you can grant permission to transfer WTON stored in DAO Vault to a specific address in a specific amount.`,
@@ -39,6 +41,7 @@ const daoVaultFunctionsOfTypeA = [
     'name': 'approveERC20',
     'title': '(DAO Vault)Permission to transfer the ERC20 stored in DAO Vault will be granted. ',
     'prettyName': '',
+    'disabled': false,
     'explanation': 'This function allows you to grant permission to transfer specific ERC20 tokens stored in DAO Vault to a specific address in a specific amount.',
   },
   {
@@ -51,6 +54,7 @@ const daoVaultFunctionsOfTypeA = [
     'name': 'claimTON',
     'title': '(DAO Vault)The transfer of the TON stored in the DAO Vault will be requested.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
   `Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
   Through this function, you can request to send the TON stored in the DAO Vault to a specific address in a specific amount.`,
@@ -65,6 +69,7 @@ const daoVaultFunctionsOfTypeA = [
     'name': 'claimWTON',
     'title': '(DAO Vault)The transfer of the WTON stored in the DAO Vault will be requested.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
   `Some of the TON seigniorage generated per block is accumulated into DAO. The DAO Vault is responsible for storing the seigniorage.
   Through this function, you can request to send the WTON stored in DAO Vault to a specific address in a specific amount.`,
@@ -81,6 +86,7 @@ const daoVaultFunctionsOfTypeA = [
     'name': 'claimERC20',
     'title': '(DAO Vault)The transfer of the ERC20 stored in the DAO Vault will be requested.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
 'This function allows you to request that the ERC20 tokens stored in the DAO Vault be transferred to a specific address and a specific amount.',
   },
@@ -91,6 +97,7 @@ const daoVaultFunctionsOfTypeB = [
     'name': 'renounceOwnership',
     'title': '(Candidate)DAO\'s authority for candidate contracts will be removed.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
 'The DAO holds owner rights to Vault. This function allows you to remove DAO\'s owner rights to the vault.',
   },
@@ -102,6 +109,7 @@ const daoVaultFunctionsOfTypeB = [
     'name': 'transferOwnership',
     'title': '(Candidate)DAO\'s authority for candidate contracts will be transferred.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
 'The DAO holds owner rights to Vault. This function allows you to transfer owner rights for the vault held by the DAO. Enter the new owner in the first parameter (Param1).',
   },
@@ -113,6 +121,7 @@ const daoVaultFunctionsOfTypeB = [
     'name': 'setTON',
     'title': '(DAO Vault)TON will be upgraded.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
 'This function is used when TON is upgraded. Enter the new TON address in the first parameter (Param1).',
   },
@@ -124,6 +133,7 @@ const daoVaultFunctionsOfTypeB = [
     'name': 'setWTON',
     'title': '(DAO Vault)WTON will be upgraded.',
     'prettyName': '',
+    'disabled': false,
     'explanation':
 'This function is used when WTON is upgraded. Enter the new WTON address in the first parameter (Param1).',
   },

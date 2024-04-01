@@ -1,6 +1,6 @@
 <template>
   <div class="card-stats-committee">
-    <card-container :title="'Agendas'">
+    <card-container :title="'Statistics'">
       <template #body>
         <div class="stats-committee">
           <div class="title">Total Agendas</div>

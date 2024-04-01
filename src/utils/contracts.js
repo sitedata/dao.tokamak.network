@@ -130,6 +130,7 @@ const powerTonLogicABIOfTypeB = [];
       f.prettyName = func.prettyName;
       f.title = func.title;
       f.params = func.params;
+      f.disabled = func.disabled;
 
       abis.push(f);
     });
