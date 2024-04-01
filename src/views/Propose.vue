@@ -94,9 +94,9 @@
         <div class="function-container function-container-desktop"
              :style="setFunctionGridTemplateColumns"
         >
-          <div v-if="index === 1" class="function-box" @click="func.disabled ? '' : openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+          <div v-if="index === 1" class="function-box" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
             <box :function-name="'setSeigRates'"
-                 :status="func.disabled ? 'disabled' : currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
+                 :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
                  :type="'A'"
             />
           </div>
@@ -169,7 +169,7 @@
             <div v-if="index === 1" @click=" openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
               <box :function-name="'setSeigRates'"
                    class="function-box"
-                   :status="func.disabled ? 'disabled' : currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
+                   :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
                    :type="'A'"
               />
             </div>
