@@ -35,7 +35,7 @@
         />
         <button-comp
           :name="'Close'"
-          :type="'vote'"
+          :type="'hide'"
           class="right"
           :width="'110px'"
           @on-clicked="close"

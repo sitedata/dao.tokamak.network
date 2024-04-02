@@ -18,7 +18,7 @@
       />
       <close-button
         :name="'Close'"
-        :type="'vote'"
+        :type="'hide'"
         :width="'110px'"
         class="btn2"
         @on-clicked="close"
