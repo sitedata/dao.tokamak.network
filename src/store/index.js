@@ -3,7 +3,7 @@ import { toBN } from 'web3-utils';
 // import numeral from 'numeral';
 
 import {
-  // getCandidates,
+  getCandidates,
   getAgendas,
   getCandidateVoteRank,
   getAgendaContents,
@@ -283,6 +283,7 @@ export default new Vuex.Store({
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
+      const candidatesFromAPI = await getCandidates();
 
       const candi = response.data.candidates;
 
@@ -334,6 +335,9 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
+
+          const candidateFromAPI = candidatesFromAPI.find(candiFromAPI => candiFromAPI.candidateContract.toString() === candidate.candidateContract.toString());
+          candidate.name = candidateFromAPI.name;
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
