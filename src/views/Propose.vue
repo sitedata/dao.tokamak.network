@@ -79,7 +79,7 @@
             <div class="contract-num-functions"
                  :style="[indexOfTypeB !== -1 ? { display: 'none' } : {}]"
             >
-              {{ pad(numFunctions(i)) }}
+              {{ pad(numFunctionsOfTypeB(i)) }}
             </div>
             <div class="contract-name"
                  :style="[indexOfTypeB === i ? { color: '#ffffff' } : {}]"

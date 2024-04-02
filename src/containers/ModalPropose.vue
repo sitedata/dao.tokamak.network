@@ -58,7 +58,7 @@
                    @on-clicked="propose"
       />
       <button-comp :name="'Close'"
-                   :type="'hide'"
+                   :type="'vote'"
                    :width="'160px'"
                    style="margin-left: 7.5px;"
                    @on-clicked="close"
