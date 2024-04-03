@@ -9,6 +9,9 @@ const BigNumber = ethers.BigNumber;
 import { createCurrency } from '@makerdao/currency';
 const _TON = createCurrency('TON');
 const _WTON = createCurrency('WTON');
+const RAY = ethers.BigNumber.from('1' + '0'.repeat(27));
+const REFACTOR_DIVIDER = BigNumber.from('2');
+const REFACTOR_BOUNDARY = BigNumber.from('1' + '0'.repeat(28));
 
 export function slice (str) {
   str = String(str);
@@ -266,3 +269,29 @@ export function truncate (str, maxDecimalDigits) {
   }
   return str;
 }
+
+export const calcMaxSeigs = async (lastSeigBlock, seigPerBlock, blockNumber) => {
+  const span = blockNumber - Number(lastSeigBlock);
+  return BigNumber.from(seigPerBlock).mul(ethers.BigNumber.from('' + span));
+};
+
+export const calcNewFactor = async (prevTotal, nxtTotal, oldFactor) => {
+  return nxtTotal.mul(oldFactor).div(prevTotal);
+};
+
+export const applyFactor = async (factor, refactorCount, balance, refactoredCount) => {
+
+  let v = BigNumber.from(balance).mul(BigNumber.from(factor)).div(RAY);
+  v = v.mul(REFACTOR_DIVIDER.pow(refactorCount.sub(refactoredCount)));
+  return v;
+};
+
+export const setFactor = async (factor_) => {
+  let count = 0;
+  let f = factor_;
+
+  for (; f.gte(REFACTOR_BOUNDARY); f = f.div(REFACTOR_DIVIDER)) {
+    count++;
+  }
+  return { factor: f, refactorCount: BigNumber.from('' + count) };
+};

@@ -1,21 +1,35 @@
 <template>
-  <div class="box"
-       :style="[
-         isHovered && type === 'A' ? { 'border': 'solid 1px #2a72e5' } : {},
-         isHovered && type === 'B' ? { 'border': 'solid 1px #f7981c' } : {},
-         $mq === 'mobile' ? { width: '100%', 'justify-content': ''} : { 'justify-content': 'center' },
-       ]"
-       @mouseover="isHovered=true" @mouseleave="isHovered=false"
-  >
-    <div class="function-name"
+  <div class="box-container">
+    <div class="box"
          :style="[
-           status === 'selected' && type === 'A' ? { color: '#2a72e5' } : {},
-           status === 'selected' && type === 'B' ? { color: '#ff7800' } : {},
+           isHovered && type === 'A' && status !== 'disabled' ? { 'border': 'solid 1px #2a72e5', 'color': '#2a72e5' } : {},
+           isHovered && type === 'B' && status !== 'disabled' ? { 'border': 'solid 1px #f7981c', 'color': '#f7981c' } : {},
+           $mq === 'mobile' ? { width: '100%', 'justify-content': ''} : { 'justify-content': 'center' },
          ]"
+         @mouseover="isHovered=true" @mouseleave="isHovered=false"
     >
-      {{ functionName }}
+      <div class="function-name"
+           :style="[
+             isHovered && type === 'A' ? { 'color': '#2a72e5' } : {},
+             isHovered && type === 'B' ? { 'color': '#f7981c' } : {},
+             status === 'selected' && type === 'A' ? { color: '#2a72e5' } : {},
+             status === 'selected' && type === 'B' ? { color: '#ff7800' } : {},
+             status === 'disabled' ? { 'color': '#bdc0c2' } : {}
+           ]"
+      >
+        {{ functionName }}
+      </div>
     </div>
-    <!-- <div>What is the temporary explanatory text insertion area.</div> -->
+    <div v-if="status === 'disabled'" class="tooltip">
+      <img
+        src="@/assets/tooltip-mobile.png" alt=""
+        width="6" height="4"
+        style="margin-right: 85px"
+      >
+      <div class="tooltip-content">
+        This function will become available after the DAO contract is upgraded.
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +57,7 @@ export default {
         return [
           'selected',
           'unselected',
+          'disabled',
         ].indexOf(value) !== -1;
       },
     },
@@ -80,6 +95,9 @@ export default {
     //   color: #2a72e5;
     // }
   }
+  &:hover ~ .tooltip {
+    display: flex
+  }
 
   > img {
     position: absolute;
@@ -114,4 +132,39 @@ export default {
   //   }
   // }
 }
+.box-container {
+
+  .tooltip {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    margin-top:10px;
+    z-index: 999;
+    > img {
+      // position: absolute;
+      margin-left: 70px;
+      right: 15px;
+      top: 15px;
+    }
+
+}
+.tooltip-content {
+  width: 208px;
+  background: #353c48;
+  border-radius: 3px;
+
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+
+  padding: 8px;
+}
+}
+
 </style>

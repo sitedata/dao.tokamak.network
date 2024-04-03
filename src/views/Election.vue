@@ -169,13 +169,13 @@ export default {
 .header-tooltip img:hover ~ .tooltip2-mobile {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: flex-end;
 }
 
 .header-tooltip img:hover ~ .tooltip1-mobile {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: flex-end;
 }
 
 

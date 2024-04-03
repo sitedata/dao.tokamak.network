@@ -15,7 +15,7 @@ import {
 import { GET_CANDIDATE } from '../../graphql/getCandidate';
 import {
   getContract,
-  parseAgendaBytecode,
+  parseAgendaBytecode, // eslint-disable-line
   getContractABIFromAddress,
 } from '@/utils/contracts';
 import { agendaStatus } from '@/utils/helpers';
@@ -283,10 +283,8 @@ export default new Vuex.Store({
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
-      const candidatesFromAPI = await getCandidates();
 
       const candi = response.data.candidates;
-
       const [
         // c,
         maxMember,
@@ -306,6 +304,8 @@ export default new Vuex.Store({
         memberAddresses.push(member);
       }
 
+      const candidatesFromAPI = await getCandidates();
+
       let web3 = state.web3;
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
@@ -321,6 +321,7 @@ export default new Vuex.Store({
             seigManager.methods.coinages(candidate.candidateContract).call(),
             seigManager.methods.lastCommitBlock(addr).call(),
           ]);
+
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
             return false;
@@ -335,7 +336,6 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-
           const candidateFromAPI = candidatesFromAPI.find(candiFromAPI => candiFromAPI.candidateContract.toString() === candidate.candidateContract.toString());
           candidate.name = candidateFromAPI.name;
           candidate.vote = totalVote; // TODO: totalVote
@@ -366,6 +366,9 @@ export default new Vuex.Store({
             isMember = true;
             return;
           }
+        });
+        members.sort(function (a, b) {
+          return b.stakedAmount - a.stakedAmount;
         });
 
         if (!isMember) {
@@ -426,6 +429,7 @@ export default new Vuex.Store({
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
+      // console.log(agendas);
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
         // console.log(txHash);
@@ -780,7 +784,6 @@ export default new Vuex.Store({
 
       const minimumAmount = toBN(getters.minimumAmount);
       const selfVote = toBN(candidate.selfVote);
-
       return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
@@ -790,6 +793,22 @@ export default new Vuex.Store({
       }
 
       return agenda.onChainEffects ? agenda.onChainEffects : [];
+    },
+    getAgendaPrevButtonState: (state) => (agendaid) => {
+      const agendaLength = state.agendas.length;
+      return Number(agendaid) + 1 === agendaLength ? false : true;
+    },
+    getAgendaNextButtonState: () => (agendaid) => {
+      return Number(agendaid) === 0 ? false : true;
+    },
+    getPrevButtonState: (_, getters) => (address) => {
+      const index = getters.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
+      return index === -1 || index === 0 ? false : true;
+    },
+    getNextButtonState: (_, getters) => (address) => {
+      const max = getters.sortedCandidates.length;
+      const index = getters.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
+      return index === -1 || index === max - 1 ? false : true;
     },
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
@@ -807,10 +826,13 @@ export default new Vuex.Store({
           return '(SeigManager)All the seigniorage rates will be changed';
         }
       }
+
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
+
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
+
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';

@@ -79,7 +79,7 @@ export default {
           const chainId = await web3.eth.getChainId();
           if (chainId !== 11155111) {
             return alert(
-              'The current network is not sepolia Please change it to the sepolia',
+              'The current network is not seplolia. Please change it to the seplolia',
             );
           }
 

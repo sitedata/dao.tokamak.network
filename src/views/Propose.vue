@@ -79,7 +79,7 @@
             <div class="contract-num-functions"
                  :style="[indexOfTypeB !== -1 ? { display: 'none' } : {}]"
             >
-              {{ pad(numFunctions(i)) }}
+              {{ pad(numFunctionsOfTypeB(i)) }}
             </div>
             <div class="contract-name"
                  :style="[indexOfTypeB === i ? { color: '#ffffff' } : {}]"
@@ -94,19 +94,27 @@
         <div class="function-container function-container-desktop"
              :style="setFunctionGridTemplateColumns"
         >
-          <div v-if="index === 1" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+          <div v-if="index === 1" class="function-box" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
             <box :function-name="'setSeigRates'"
                  :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
                  :type="'A'"
             />
           </div>
-          <div v-for="func in getFunctions()" :key="func.name"
-               @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+          <div v-for="func in getFunctions()" :key="func.name" class="function-box"
+               @click="func.disabled ? '' :openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
           >
             <box :function-name="func.name"
-                 :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                 :status="func.disabled ? 'disabled' : currentFunction === func.name ? 'selected' : 'unselected'"
                  :type="type"
             />
+            <div v-if="func.disabled" class="tooltip">
+              <img
+                src="@/assets/tooltip-mobile.png" alt=""
+                width="4" height="6"
+                style="margin-top: 30px"
+              >
+              <div class="tooltip-content">This function will become available after the DAO contract is upgraded</div>
+            </div>
           </div>
         </div>
       </div>
@@ -158,17 +166,19 @@
                class="function-container"
                :style="setFunctionGridTemplateColumns"
           >
-            <div v-if="index === 1" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+            <div v-if="index === 1" @click=" openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
               <box :function-name="'setSeigRates'"
+                   class="function-box"
                    :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
                    :type="'A'"
               />
             </div>
             <div v-for="func in getFunctions()" :key="func.name"
-                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 class="function-box"
+                 @click="func.disabled ? '' : openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :status="func.disabled ? 'disabled' : currentFunction === func.name ? 'selected' : 'unselected'"
                    :type="type"
                    class="box"
               />
@@ -201,11 +211,12 @@
                :style="setFunctionGridTemplateColumns"
           >
             <div v-for="func in getFunctions()" :key="func.name"
-                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="func.disabled ? '' : openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :status="func.disabled ? 'disabled' : currentFunction === func.name ? 'selected' : 'unselected'"
                    :type="type"
+
                    class="box"
               />
             </div>
@@ -315,6 +326,21 @@ export default {
         return { 'grid-template-columns': 'repeat(1, 1fr)' };
       }
     },
+    // func.disabled () {
+    //   console.log(this.getFunctions(), this.currentContract);
+    //   const functions = this.getFunctions();
+
+    //   if (this.type === 'A') {
+    //     if (this.functionName === 'setActivityRewardPerSecond') {
+    //       console.log('a');
+    //       return true;
+    //     }
+    //     else return false;
+    //   } else {
+    //     if (this.functionName === 'setSeigManager') return true;
+    //     else return false;
+    //   }
+    // },
   },
   created () {
     this.depositManagerFunctionsOfTypeA = getContractABI('DepositManager', 'A');
@@ -344,6 +370,7 @@ export default {
       this.width = window.innerWidth;
     },
     openModal () {
+      // console.log(this.func.disabled);
       this.showModal = true;
 
       const element = document.getElementById('app');
@@ -492,7 +519,7 @@ export default {
         } else if (index === 2) {
           return this.daoCommitteeProxyFunctionsOfTypeA;
         } else if (index === 3) {
-          return this.daoVaultFunctionsOfTypeA;
+          return this.daoVaultFunctionsOfTypeA.filter(f => (f.name !== 'claimTON')).filter(f => f.name !== 'claimWTON');
         } else {
           console.log('bug', 'no type A functions'); // eslint-disable-line
           return [];
@@ -731,6 +758,34 @@ export default {
       margin-bottom: 40px;
     }
   }
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+
+  left: 39%;
+  top: -17px;
+  width: 300px;
+
+  z-index: 999;
+}
+
+.tooltip-content {
+  max-width: 317px;
+  background: #353c48;
+  border-radius: 3px;
+
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+
+  padding: 8px;
 }
 
 .propose-mobile {

@@ -13,8 +13,8 @@
                      @on-clicked="$router.push({ path: '/election' })"
         />
         <div>
-          <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
-          <button-step :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
+          <button-step v-if="getPrevButtonState(address)" :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
+          <button-step v-if="getNextButtonState(address)" :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
         </div>
       </div>
       <div class="content">
@@ -59,7 +59,7 @@
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Stakers
+            Top 100 Stakers
           </div>
           <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
         </div>
@@ -75,8 +75,8 @@
                      @on-clicked="$router.push({ path: '/election' })"
         />
         <div>
-          <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 130px" @on-clicked="prev" />
-          <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 130px" @on-clicked="next" />
+          <button-step v-if="getPrevButtonState(address)" :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 130px" @on-clicked="prev" />
+          <button-step v-if="getNextButtonState(address)" :type="'next'" :name="'NEXT'" class="next" style="width: 130px" @on-clicked="next" />
         </div>
       </div>
       <div class="content-tablet">
@@ -100,7 +100,7 @@
                style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Stakers
+            Top 100 Stakers
           </div>
           <span class="space" />
           <button v-if="account"
@@ -130,8 +130,8 @@
                      @on-clicked="$router.push({ path: '/election' })"
         />
         <div>
-          <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
-          <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
+          <button-step v-if="getPrevButtonState(address)" :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
+          <button-step v-if="getNextButtonState(address)" :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
         </div>
       </div>
       <div class="content">
@@ -152,7 +152,7 @@
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Stakers
+            Top 100 Stakers
           </div>
           <!-- <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div> -->
 
@@ -218,7 +218,15 @@ export default {
       'member',
       'sortedCandidates',
       'canUpdateReward',
+      'getPrevButtonState',
+      'getNextButtonState',
     ]),
+    // prevState () {
+    //   const index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
+    //   console.log(index);
+    //   console.log(index === -1 || index === 0);
+    //   return index === -1 || index === 0 ? false : true;
+    // },
   },
   watch: {
     '$route.params.address': {
@@ -242,7 +250,7 @@ export default {
     prev () {
       let index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === 0) {
-        return;
+        return ;
       }
       index--;
 
@@ -253,7 +261,7 @@ export default {
       const max = this.sortedCandidates.length;
       let index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === max - 1) {
-        return;
+        return ;
       }
       index++;
 

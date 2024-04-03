@@ -1,6 +1,13 @@
 <template>
   <div class="modal-update-reward">
-    <div class="label-update-reward">You can get {{ expectedSeig | withComma }} TON reward</div>
+    <div class="label-update-reward">
+      You can get
+      <div v-if="loading" class="dot-flashing"></div>
+      <div v-else :style="{margin: '0px 6px'}">
+        {{ expectedSeig | withComma }}
+      </div>
+      TON reward
+    </div>
     <div class="label">Do you want to continue?</div>
     <div class="button-container">
       <update-button :name="'Update'"
@@ -21,11 +28,13 @@
 </template>
 
 <script>
-import { calculateExpectedSeig, setNetwork } from 'tokamak-staking-lib';
+// import { calculateExpectedSeig, setNetwork } from 'tokamak-staking-lib';
 import { toBN } from 'web3-utils';
-import { WTON } from '@/utils/helpers';
+import { WTON, calcMaxSeigs, calcNewFactor, applyFactor, setFactor } from '@/utils/helpers';
 import { getContract } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
+import { ethers } from 'ethers';
+const BigNumber = ethers.BigNumber;
 
 import Button from '@/components/Button.vue';
 
@@ -38,6 +47,7 @@ export default {
     return {
       address: '',
       expectedSeig: '0',
+      loading: true,
     };
   },
   computed: {
@@ -71,6 +81,7 @@ export default {
       this.$emit('on-closed');
     },
     async calcExpectedSeig () {
+      const RAY = ethers.BigNumber.from('1' + '0'.repeat(27));
       const candidate = this.candidate(this.address);
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
@@ -83,42 +94,64 @@ export default {
 
         const seigManager = getContract('SeigManager', this.web3);
         const _tot = await seigManager.methods.tot().call();
-        const tot = getContract('Coinage', this.web3, _tot);
+        const tot = getContract('Tot', this.web3, _tot);
         const owner = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-        const fromBlockNumber = candidate.lastCommitBlockNumber;
+        // const fromBlockNumber = candidate.lastCommitBlockNumber;
         const toBlockNumber = this.blockNumber;
 
         const userStakedAmount = await coinage.methods.balanceOf(this.account).call();
         const totalStakedAmount = await tot.methods.totalSupply().call();
-        const pseigRate = await seigManager.methods.relativeSeigRate().call();
+        // const pseigRate = await seigManager.methods.relativeSeigRate().call();
         const tonTotalSupply = await ton.methods.totalSupply().call();
         const tonBalanceOfWTON = await ton.methods.balanceOf(wton._address).call();
-        const commissionRate = await seigManager.methods.commissionRates(owner).call();
-        const operatorStakedAmount = await coinage.methods.balanceOf(candidate.candidate).call();
+        // const commissionRate = await seigManager.methods.commissionRates(owner).call();
+        // const operatorStakedAmount = await coinage.methods.balanceOf(candidate.candidate).call();
         const isCommissionRateNegative = await seigManager.methods.isCommissionRateNegative(owner).call();
         const totalStakedAmountOnLayer2 = await coinage.methods.totalSupply().call();
+
+        const lastSeigBlock = await seigManager.methods.lastSeigBlock().call();
+        const seigPerBlock = await seigManager.methods.seigPerBlock().call();
+        const relativeSeigRate = await seigManager.methods.relativeSeigRate().call();
 
         const isOperator = this.isCandidate ? true : false;
         const tos = (toBN(tonTotalSupply).mul(toBN(10e8)))
           .add(toBN(totalStakedAmount))
           .sub(toBN(tonBalanceOfWTON).mul(toBN(10e8)));
 
-        setNetwork('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10');
-        const expectedSeig = calculateExpectedSeig(
-          toBN(fromBlockNumber),
-          toBN(toBlockNumber),
-          toBN(userStakedAmount),
-          toBN(totalStakedAmount),
-          toBN(tos),
-          toBN(pseigRate),
-          toBN(commissionRate),
-          isCommissionRateNegative,
-          toBN(operatorStakedAmount),
-          toBN(totalStakedAmountOnLayer2),
-          isOperator,
-        );
+        const totFactor = await tot.methods.factor().call();
+        const totBalanceAndFactor = await tot.methods.getBalanceAndFactor(candidate.candidateContract).call();
 
-        this.expectedSeig = WTON(expectedSeig);
+        const maxSeig = await calcMaxSeigs(lastSeigBlock, seigPerBlock, toBlockNumber);
+        const stakedSeig1 = maxSeig.mul(totalStakedAmount).div(BigNumber.from(tos.toString()));
+        const unstakedSeig = maxSeig.sub(stakedSeig1);
+        const stakedSeig = stakedSeig1.add(unstakedSeig.mul(relativeSeigRate).div(RAY));
+
+        const nextTotTotalSupply = BigNumber.from(totalStakedAmount).add(stakedSeig);
+        const newTotFactor = await calcNewFactor (totalStakedAmount, nextTotTotalSupply, totFactor);
+        const newFactorSet = await setFactor(newTotFactor);
+
+        const nextBalanceOfLayerInTot = await applyFactor(newFactorSet?.factor, newFactorSet?.refactorCount, totBalanceAndFactor[0].balance, totBalanceAndFactor[0].refactoredCount);
+
+        const commissionRates = await seigManager.methods.commissionRates(candidate.candidateContract).call();
+
+        const seigOfLayer = nextBalanceOfLayerInTot.sub(totalStakedAmountOnLayer2);
+        let operatorSeigs = ethers.constants.Zero;
+
+        let seig;
+
+        if (commissionRates.toString() !== ethers.constants.Zero) {
+          if (!isCommissionRateNegative) {
+            operatorSeigs = seigOfLayer.mul(commissionRates).div(RAY);
+            const restSeigs = seigOfLayer.sub(operatorSeigs);
+            const userSeig = restSeigs.mul(BigNumber.from(userStakedAmount)).div(BigNumber.from(candidate.stakedAmount));
+            seig = isOperator ? userSeig.add(operatorSeigs) : userSeig;
+          }
+        } else {
+          seig = candidate.stakedAmount === '0' ? 0 : seigOfLayer.mul(BigNumber.from(userStakedAmount)).div(BigNumber.from(candidate.stakedAmount));
+        }
+
+        this.expectedSeig = WTON(seig);
+        this.loading = false;
       } catch (e) {
         console.log(e); // eslint-disable-line
       }
@@ -253,10 +286,61 @@ export default {
     letter-spacing: normal;
     text-align: center;
     color: #3e495c;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
     padding-top: 45px;
 
     margin-bottom: 15px;
+  }
+
+  .dot-flashing {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    top: 15px;
+    border-radius: 5px;
+    margin: 0px 25px;
+    background-color: #3e495c;
+    color: #3e495c;
+    animation: dot-flashing 1s infinite linear alternate;
+    animation-delay: 0.5s;
+  }
+  .dot-flashing::before, .dot-flashing::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+  .dot-flashing::before {
+    left: -15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #3e495c;
+    color: #3e495c;
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 0s;
+  }
+  .dot-flashing::after {
+    left: 15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #3e495c;
+    color: #3e495c;
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 1s;
+  }
+
+  @keyframes dot-flashing {
+    0% {
+      background-color: #3e495c;
+    }
+    50%, 100% {
+      background-color: rgba(152, 128, 255, 0.2);
+    }
   }
 
   .label {

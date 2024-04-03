@@ -8,6 +8,7 @@ import VueApollo from 'vue-apollo';
 import VueGtag from 'vue-gtag';
 // import { ApolloClient, InMemoryCache } from '@apollo/client';
 import apollo from '../graphql/apollo';
+import VTooltip from 'v-tooltip';
 
 Vue.use(VueGtag, {
   config: {
@@ -26,6 +27,7 @@ Object.keys(filters).forEach(key => {
 Vue.prototype.$apollo = apollo;
 
 Vue.use(VueApollo);
+Vue.use(VTooltip);
 
 // const apolloProvider = new VueApollo({
 //   defaultClient: apolloClient,

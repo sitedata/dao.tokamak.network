@@ -25,6 +25,8 @@ const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
+const refactorCoinageSnapshot = require('../contracts/RefactorCoinageSnapshot.json');
+
 const {
   daoCommitteeFunctionsOfTypeB,
   daoCommitteeProxyFunctionsOfTypeA,
@@ -77,6 +79,7 @@ function getContract (want, web3, address) {
   const PowerTONProxy = new web3.eth.Contract(powerTONProxy.abi, deployed.PowerTONProxy);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
+  const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
 
   const contracts = {
     Candidate,
@@ -92,6 +95,7 @@ function getContract (want, web3, address) {
     SeigManager,
     Coinage,
     Layer2Registry,
+    Tot,
   };
 
   if (want) {
@@ -128,6 +132,7 @@ const powerTonLogicABIOfTypeB = [];
       f.prettyName = func.prettyName;
       f.title = func.title;
       f.params = func.params;
+      f.disabled = func.disabled;
 
       abis.push(f);
     });
@@ -180,7 +185,9 @@ module.exports.getContractABIFromAddress = function (address, type) {
 
   if (type === 'A') {
     if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
+    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
+    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
     else return [];
@@ -188,7 +195,9 @@ module.exports.getContractABIFromAddress = function (address, type) {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
     else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
     else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeB;
+    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeB;
+    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
     else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
@@ -310,6 +319,7 @@ const getABIFromSelector = function (selector, type) {
 
     abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
+
   } else if (type === 'B') {
     abi = tonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
@@ -475,7 +485,7 @@ module.exports.minimumAmountOfOperator = async function (_web3) {
 
 // module.exports.getBlockTimeStamp = async function (blockNumber, web3) {
 //   if (!web3) {
-//     web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+//     web3 = new Web3(new Web3.providers.HttpProvider('https://seplolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
 //   }
 //   const block = await web3.eth.getBlock(blockNumber);
 //   this.timestamp = block.timestamp;

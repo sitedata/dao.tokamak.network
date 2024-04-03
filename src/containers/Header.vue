@@ -33,7 +33,7 @@
               width="105"
               height="30"
             />
-            <div class="beta beta-sub">sepolia</div>
+            <div class="beta beta-sub">mainnet</div>
           </div>
           <div v-else class="logo-container">
             <img
@@ -57,7 +57,7 @@
               selected: $route.path.includes('election'),
             }"
           >
-            Election
+            DAO Candidates
           </router-link>
           <router-link
             :to="'/propose'"
@@ -78,7 +78,7 @@
               selected: $route.path.includes('agenda'),
             }"
           >
-            Committee
+            Agenda
           </router-link>
         </div>
       </div>
