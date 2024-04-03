@@ -25,6 +25,8 @@ const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
+const refactorCoinageSnapshot = require('../contracts/RefactorCoinageSnapshot.json');
+
 const {
   daoCommitteeFunctionsOfTypeB,
   daoCommitteeProxyFunctionsOfTypeA,
@@ -79,6 +81,7 @@ function getContract (want, web3, address) {
   const PowerTONProxy = new web3.eth.Contract(powerTONProxy.abi, deployed.PowerTONProxy);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
+  const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
 
   const contracts = {
     Candidate,
@@ -94,6 +97,7 @@ function getContract (want, web3, address) {
     SeigManager,
     Coinage,
     Layer2Registry,
+    Tot,
   };
 
   if (want) {
