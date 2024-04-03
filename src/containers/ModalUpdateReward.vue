@@ -129,7 +129,7 @@ export default {
         const nextTotTotalSupply = BigNumber.from(totalStakedAmount).add(stakedSeig);
         const newTotFactor = await calcNewFactor (totalStakedAmount, nextTotTotalSupply, totFactor);
         const newFactorSet = await setFactor(newTotFactor);
-        console.log(totBalanceAndFactor[0]);
+
         const nextBalanceOfLayerInTot = await applyFactor(newFactorSet?.factor, newFactorSet?.refactorCount, totBalanceAndFactor[0].balance, totBalanceAndFactor[0].refactoredCount);
 
         const commissionRates = await seigManager.methods.commissionRates(candidate.candidateContract).call();
