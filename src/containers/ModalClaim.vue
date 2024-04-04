@@ -11,7 +11,7 @@
       />
       <close-button
         :name="'Close'"
-        :type="'vote'"
+        :type="'hide'"
         :width="'110px'"
         class="btn2"
         @on-clicked="close"
@@ -47,17 +47,18 @@ export default {
       this.$emit('on-closed');
     },
     async claim () {
+
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
 
-      const gasLimit = await candidateContract.methods.claimActivityReward()
-        .estimateGas({
-          from: this.account,
-        });
-
+      // const gasLimit = await candidateContract.methods.claimActivityReward()
+      //   .estimateGas({
+      //     from: this.account,
+      //   });
+      // console.log(gasLimit);
       await candidateContract.methods.claimActivityReward()
         .send({
           from: this.account,
-          gasLimit: Math.floor(gasLimit * 1.2),
+          // gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', async (hash) => {
           this.$store.commit('SET_PENDING_TX', hash);
@@ -66,7 +67,7 @@ export default {
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
             this.$store.commit('SET_PENDING_TX', '');
-            await this.$store.dispatch('launch');
+            await this.$store.dispatch('candidateLaunch');
             await this.$store.dispatch('connectEthereum', this.web3);
           }
         })

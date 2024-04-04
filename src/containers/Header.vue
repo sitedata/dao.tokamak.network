@@ -33,7 +33,7 @@
               width="105"
               height="30"
             />
-            <div class="beta beta-sub">rinkeby</div>
+            <div class="beta beta-sub">mainnet</div>
           </div>
           <div v-else class="logo-container">
             <img
@@ -49,7 +49,7 @@
       <div class="header-gridItem">
         <div class="menu">
           <router-link
-            :to="'/'"
+            :to="'/election'"
             class="menu-item"
             style="margin-right:60px"
             :class="{
@@ -57,10 +57,10 @@
               selected: $route.path.includes('election'),
             }"
           >
-            Election
+            DAO Candidates
           </router-link>
           <router-link
-            :to="'/'"
+            :to="'/propose'"
             class="menu-item"
             style="margin-right:60px"
             :class="{
@@ -71,14 +71,14 @@
             Propose
           </router-link>
           <router-link
-            :to="'/'"
+            :to="'/agenda'"
             class="menu-item"
             :class="{
               'menu-item-sub': isSub,
               selected: $route.path.includes('agenda'),
             }"
           >
-            Committee
+            Agenda
           </router-link>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default {
   justify-content: space-between;
   flex-direction: column;
   height: 84px;
-  background: transparent;
+  background: #0062c2;
   z-index: 1;
   padding-left: 40px;
   padding-right: 40px;

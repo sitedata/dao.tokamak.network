@@ -250,7 +250,8 @@ export default {
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
       }
-      if (candidate.operator.toLowerCase() === this.account.toLowerCase()) {
+
+      if (candidate.candidateContract.toLowerCase() === this.account.toLowerCase()) {
         const amountToRay = toRay(this.$refs.tonvote.$refs.input.value);
         const minimumAmount = await minimumAmountOfOperator(this.web3);
         const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
@@ -484,7 +485,7 @@ export default {
       return data;
     },
     async update () {
-      await this.$store.dispatch('launch');
+      await this.$store.dispatch('candidateLaunch');
       await this.$store.dispatch('connectEthereum', this.web3);
       const candidateFound = this.candidates.find(candidate => candidate.candidateContract === this.address);
       await this.$store.dispatch('setVoters', candidateFound);

@@ -26,6 +26,7 @@
     <text-time :type="agenda.type"
                :time="votingTime(agenda)"
                :is-active="votingTime(agenda) !== 'POLL ENDED'"
+               :is-agenda="true"
     />
     <div class="button-container">
       <agenda-button :name="'View Detail'"
@@ -221,7 +222,7 @@ export default {
               this.actInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
 
-              await this.$store.dispatch('launch');
+              await this.$store.dispatch('agendaLaunch');
               await this.$store.dispatch('connectEthereum', this.web3);
             }
           })
@@ -250,7 +251,7 @@ export default {
               this.actInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
 
-              await this.$store.dispatch('launch');
+              await this.$store.dispatch('agendaLaunch');
               await this.$store.dispatch('connectEthereum', this.web3);
             }
           })

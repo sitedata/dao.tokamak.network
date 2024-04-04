@@ -1,15 +1,15 @@
 <template>
   <div class="committee-info-vote">
     <div class="review">
-      <div class="container-title">Review</div>
+      <!-- <div class="container-title">Review</div> -->
       <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
-          <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div>
-          <div v-else>{{ voter.account }}</div>
-          <div>{{ voter.balance | WTON | withComma }} TON Voted</div>
+          <!-- <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div> -->
+          <div :style="{color:'#2a72e5'}">{{ voter.user.id | hexSlicer }}</div>
+          <div>{{ roundNumber(calcPct(voter.stakeOf, sumOfVotes)) }}% ({{ voter.stakeOf | WTON | withComma }} TON) </div>
         </div>
         <vote-poll class="vote-poll"
-                   :pct="calcPct(voter.balance, sumOfVotes)"
+                   :pct="calcPct(voter.stakeOf, sumOfVotes)"
                    :margin="0"
         />
       </div>
@@ -20,13 +20,13 @@
     />
     <div class="line" />
     <div class="voting-stats">
-      <div class="container-title">Voting Stats</div>
+      <div class="container-title">Summary</div>
       <div class="voting-stat-item">
-        <span class="voting-stat-title">Total Vote</span>
+        <span class="voting-stat-title">Total Staked</span>
         <span class="voting-stat-content">{{ sumOfVotes | WTON | withComma }} TON</span>
       </div>
       <div class="voting-stat-item">
-        <span class="voting-stat-title">Unique Voters</span>
+        <span class="voting-stat-title">Number of Stakers</span>
         <span class="voting-stat-content">{{ votersWithBalance.length }}</span>
       </div>
     </div>
@@ -67,6 +67,15 @@ export default {
     },
     calcPct () {
       return (vote, totalVotes) => Number(vote * 100 / totalVotes);
+    },
+    roundNumber () {
+      return pct => {
+        if (isNaN (pct) === false && Number.isInteger(pct) === false) {
+          return pct.toFixed(2);
+        } else {
+          return pct;
+        }
+      };
     },
   },
   methods: {

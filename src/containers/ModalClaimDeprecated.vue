@@ -35,7 +35,7 @@
         />
         <button-comp
           :name="'Close'"
-          :type="'vote'"
+          :type="'hide'"
           class="right"
           :width="'110px'"
           @on-clicked="close"
@@ -92,7 +92,7 @@ export default {
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
               this.$store.commit('SET_PENDING_TX', '');
-              await this.$store.dispatch('launch');
+              await this.$store.dispatch('candidateLaunch');
               await this.$store.dispatch('connectEthereum', this.web3);
             }
           })
@@ -119,7 +119,7 @@ export default {
             .on('confirmation', async (confirmationNumber) => {
               if (this.confirmBlock === confirmationNumber) {
                 this.$store.commit('SET_PENDING_TX', '');
-                await this.$store.dispatch('launch');
+                await this.$store.dispatch('candidateLaunch');
                 await this.$store.dispatch('connectEthereum', this.web3);
               }
             })

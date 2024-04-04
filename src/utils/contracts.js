@@ -25,6 +25,8 @@ const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
+const refactorCoinageSnapshot = require('../contracts/RefactorCoinageSnapshot.json');
+
 const {
   daoCommitteeFunctionsOfTypeB,
   daoCommitteeProxyFunctionsOfTypeA,
@@ -47,17 +49,19 @@ const { wtonFunctionsOfTypeB } = require('./contractFunctions/wtonFunctions');
 const deployed = {
   'TON': '0x2be5e8c109e2197D077D13A82dAead6a9b3433C5',
   'WTON': '0xc4A11aaf6ea915Ed7Ac194161d2fC9384F15bff2',
-  'Layer2Registry': '0x0b3E174A2170083e770D5d4Cf56774D221b7063e',
-  'DepositManager': '0x56E465f654393fa48f007Ed7346105c7195CEe43',
+  'Layer2Registry': '0x7846c2248a7b4de77e9c2bae7fbb93bfc286837b',
+  'DepositManager': '0x0b58ca72b12f01fc05f8f252e226f3e2089bd00e',
   'CoinageFactory': '0x5b40841eeCfB429452AB25216Afc1e1650C07747',
-  'SeigManager': '0x710936500aC59e8551331871Cbad3D33d5e0D909',
+  'SeigManager': '0x0b55a0f463b6defb81c6063973763951712d0e5f',
   'PowerTON': '0xd86d8950A4144D8a258930F6DD5f90CCE249E1CF',
   'PowerTONProxy': '0x970298189050abd4dc4f119ccae14ee145ad9371',
   'DAOVault': '0x2520CD65BAa2cEEe9E6Ad6EBD3F45490C42dd303',
   'DAOAgendaManager': '0xcD4421d082752f363E1687544a09d5112cD4f484',
-  'CandidateFactory': '0xE6713aF11aDB0cFD3C60e15b23E43f5548C32942',
+  'CandidateFactory': '0x9FC7100a16407eE24a79C834A56E6ECA555A5D7c',
   'DAOCommittee': '0xd1A3fDDCCD09ceBcFCc7845dDba666B7B8e6D1fb',
   'DAOCommitteeProxy': '0xDD9f0cCc044B0781289Ee318e5971b0139602C26',
+  'OldSeigManager': '0x710936500aC59e8551331871Cbad3D33d5e0D909',
+  'OldDepositManager': '0x56E465f654393fa48f007Ed7346105c7195CEe43',
 };
 
 function getContract (want, web3, address) {
@@ -77,6 +81,7 @@ function getContract (want, web3, address) {
   const PowerTONProxy = new web3.eth.Contract(powerTONProxy.abi, deployed.PowerTONProxy);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
+  const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
 
   const contracts = {
     Candidate,
@@ -92,6 +97,7 @@ function getContract (want, web3, address) {
     SeigManager,
     Coinage,
     Layer2Registry,
+    Tot,
   };
 
   if (want) {
@@ -128,6 +134,7 @@ const powerTonLogicABIOfTypeB = [];
       f.prettyName = func.prettyName;
       f.title = func.title;
       f.params = func.params;
+      f.disabled = func.disabled;
 
       abis.push(f);
     });
@@ -180,7 +187,9 @@ module.exports.getContractABIFromAddress = function (address, type) {
 
   if (type === 'A') {
     if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
+    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
+    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
     else return [];
@@ -188,7 +197,9 @@ module.exports.getContractABIFromAddress = function (address, type) {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
     else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
     else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeB;
+    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeB;
+    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
     else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
@@ -310,6 +321,7 @@ const getABIFromSelector = function (selector, type) {
 
     abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
+
   } else if (type === 'B') {
     abi = tonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
@@ -352,55 +364,59 @@ module.exports.getABIFromSelector = getABIFromSelector;
 
 module.exports.parseAgendaBytecode = function (tx, type) {
   // TODO: to fix case of using mixed type with 'A' and 'B'
-  const params1 = marshalString(unmarshalString(tx.input).substring(8));
-  const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
-  const params2 = decodedParams1[2];
-  const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'], params2);
+  try {
+    const params1 = marshalString(unmarshalString(tx.input).substring(8));
+    const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
+    const params2 = decodedParams1[2];
+    const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'], params2);
 
-  const targets = decodedParams2[0];
-  const commands = decodedParams2[4];
+    const targets = decodedParams2[0];
+    const commands = decodedParams2[4];
 
-  if (targets.length !== commands.length) {
-    console.log('bug'); // eslint-disable-line
-  }
-
-  const onChainEffects = [];
-  for (let i = 0; i < targets.length; i++) {
-    const selector = commands[i].slice(0, 10);
-    let abi = getABIFromSelector(selector, type);
-    if (!abi) {
-      abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+    if (targets.length !== commands.length) {
+      console.log('bug'); // eslint-disable-line
     }
 
-    if (!abi) {
-      onChainEffects.push({
-        target: '',
-        name: '',
-        types: [],
-        bytecode: '',
+    const onChainEffects = [];
+    for (let i = 0; i < targets.length; i++) {
+      const selector = commands[i].slice(0, 10);
+      let abi = getABIFromSelector(selector, type);
+      if (!abi) {
+        abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+      }
+
+      if (!abi) {
+        onChainEffects.push({
+          target: '',
+          name: '',
+          types: [],
+          bytecode: '',
+        });
+        console.log('bug', 'no abi'); // eslint-disable-line
+        continue;
+      }
+
+      const target = targets[i];
+      const name = abi.name;
+      const types = [];
+      abi.inputs.forEach(input => {
+        types.push(input.type);
       });
-      console.log('bug', 'no abi'); // eslint-disable-line
-      continue;
+      const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
+      const values = decodeParameters(types, bytecode);
+
+      const onChainEffect = {
+        target,
+        name,
+        types,
+        values,
+      };
+      onChainEffects.push(onChainEffect);
     }
-
-    const target = targets[i];
-    const name = abi.name;
-    const types = [];
-    abi.inputs.forEach(input => {
-      types.push(input.type);
-    });
-    const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
-    const values = decodeParameters(types, bytecode);
-
-    const onChainEffect = {
-      target,
-      name,
-      types,
-      values,
-    };
-    onChainEffects.push(onChainEffect);
+    return onChainEffects;
+  } catch (e) {
+    console.log(e); //eslint-disable-line
   }
-  return onChainEffects;
 };
 
 module.exports.metamaskErrorMessage = function (errorString) {

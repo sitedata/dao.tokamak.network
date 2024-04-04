@@ -1,53 +1,6 @@
 <template>
   <div class="agenda">
-    <div v-if="launched" class="container">
-      <div class="filter-container">
-        <div class="header">Filters</div>
-        <div class="filters">
-          <dropdown ref="filter0"
-                    class="filter"
-                    :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
-                    :hint="'Status'"
-                    :button-type="'a'"
-                    :selector-type="'a'"
-                    @on-selected="filter($event, 'status')"
-          />
-          <dropdown ref="filter1"
-                    class="filter"
-                    :items="['All', 'Pending', 'Accept', 'Reject', 'Dismiss']"
-                    :hint="'Result'"
-                    :button-type="'a'"
-                    :selector-type="'a'"
-                    @on-selected="filter($event, 'result')"
-          />
-          <dropdown ref="filter2"
-                    class="filter"
-                    :items="['All', 'Executed', 'Not Executed']"
-                    :hint="'Execution'"
-                    :button-type="'a'"
-                    :selector-type="'a'"
-                    @on-selected="filter($event, 'executed')"
-          />
-          <dropdown v-if="isCandidate"
-                    ref="filter3"
-                    class="filter"
-                    :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
-                    :hint="'Vote'"
-                    :button-type="'a'"
-                    :selector-type="'a'"
-                    @on-selected="filter($event, 'voted')"
-          />
-          <dropdown v-if="account "
-                    ref="filter4"
-                    class="filter"
-                    :items="['All', 'Mine']"
-                    :hint="'Proposal'"
-                    :button-type="'a'"
-                    :selector-type="'a'"
-                    @on-selected="filter($event, 'proposal')"
-          />
-        </div>
-      </div>
+    <div v-if="agendaLaunched" class="container">
       <div class="wrapper"
            :style="[
              $mq === 'desktop' || $mq === 'tablet' ? { 'flex-direction': 'row' } : { 'flex-direction': 'column' },
@@ -55,6 +8,52 @@
       >
         <div class="agenda-container">
           <div class="header">Agenda</div>
+          <div class="filter-container">
+            <div class="filters">
+              <dropdown ref="filter0"
+                        class="filter"
+                        :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
+                        :hint="'Group'"
+                        :button-type="'a'"
+                        :selector-type="'a'"
+                        @on-selected="filter($event, 'status')"
+              />
+              <dropdown ref="filter1"
+                        class="filter"
+                        :items="['All', 'Pending', 'Accept', 'Reject', 'Dismiss']"
+                        :hint="'Status'"
+                        :button-type="'a'"
+                        :selector-type="'a'"
+                        @on-selected="filter($event, 'result')"
+              />
+              <dropdown ref="filter2"
+                        class="filter"
+                        :items="['All', 'Executed', 'Not Executed']"
+                        :hint="'Function'"
+                        :button-type="'a'"
+                        :selector-type="'a'"
+                        @on-selected="filter($event, 'executed')"
+              />
+              <dropdown v-if="isCandidate"
+                        ref="filter3"
+                        class="filter"
+                        :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
+                        :hint="'Voted'"
+                        :button-type="'a'"
+                        :selector-type="'a'"
+                        @on-selected="filter($event, 'voted')"
+              />
+              <dropdown v-if="account "
+                        ref="filter4"
+                        class="filter"
+                        :items="['All', 'Mine']"
+                        :hint="'Remaining'"
+                        :button-type="'a'"
+                        :selector-type="'a'"
+                        @on-selected="filter($event, 'proposal')"
+              />
+            </div>
+          </div>
           <card-agenda v-for="agenda in agendasFiltered.slice(0, 5)" :key="agenda.agendaid"
                        :agenda="agenda"
           />
@@ -135,7 +134,7 @@ export default {
     ...mapState([
       'account',
       'blockTime',
-      'launched',
+      'agendaLaunched',
       'agendas',
       'agendaVotesByCandidates',
     ]),
@@ -278,6 +277,20 @@ export default {
   display: flex;
   justify-content: center;
 }
+.header {
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: left;
+  color: #3e495c;
+
+  margin-top: 45px;
+  margin-bottom: 16px;
+}
 
 .container {
   display: flex;
@@ -285,13 +298,13 @@ export default {
 
   width: 1194px;
 
-  margin-left: 20px;
+  margin-left: 15px;
   margin-right: 20px;
 
   .filter-container {
     display: flex;
 
-    margin-top: 20px;
+    margin-bottom: 20px;
 
     .header {
       font-family: Roboto;
@@ -317,7 +330,7 @@ export default {
       width: 120px;
       margin-top: 8px;
 
-      margin-left: 15px;
+      margin-right: 15px;
     }
   }
 
@@ -329,20 +342,6 @@ export default {
     flex: 1;
     margin-right: 15px;
 
-    .header {
-      font-family: Roboto;
-      font-size: 24px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.33;
-      letter-spacing: normal;
-      text-align: left;
-      color: #3e495c;
-
-      margin-top: 45px;
-      margin-bottom: 16px;
-    }
     .hide-btn {
       height: 55px;
 
@@ -351,7 +350,7 @@ export default {
   }
 
   .card-container {
-    margin-top: 45px;
+    margin-top: 100px;
   }
 }
 </style>

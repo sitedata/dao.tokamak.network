@@ -1,32 +1,33 @@
 <template>
   <div class="card-member">
     <div class="header-container">
-      <text-smallest :label="'Status'"
+      <!-- <text-smallest :label="'Status'"
                      :value="member ? 'Occupied' : 'Empty'"
                      :with-bar="true"
       />
       <text-smallest :label="'Elected'"
                      :value="member ? hexSlicer(member.layer2) : '-'"
-                     :with-bar="true"
-      />
-      <text-smallest :label="'# of Votes'"
+                     :with-bar="true" -->
+      <!-- /> -->
+      <text-smallest :label="'Total Staked'"
                      :value="member ? amountTON(member.vote) : '0 TON'"
                      :with-bar="false"
       />
-      <text-small class="member-slot"
+      <!-- <text-small class="member-slot"
                   :type="'A'"
                   :label="'Slot'"
                   :value="`#${memberIndex}`"
-      />
+      /> -->
     </div>
     <div class="title-container">
       <div class="title">{{ member ? member.name : '-' }}</div>
-      <div class="type">{{ member ? `- ${member.kind}` : '' }}</div>
+      <!-- <div class="type">{{ member ? `- ${member.kind}` : '' }}</div> -->
     </div>
     <div class="sub">{{ member ? desc : '-' }}</div>
     <text-time :type="'A'"
-               :time="member ? fromNow(member.info.memberJoinedTime) : '-'"
+               :time="member ? fromNow(candidate(member.candidateContract).lastCommitAt) : '-'"
                :is-active="true"
+               :is-agenda="false"
     />
     <div class="button-container">
       <election-button :name="'View Detail'"
@@ -56,19 +57,19 @@
 
 <script>
 import { toBN } from 'web3-utils';
-import { fromNow, hexSlicer, WTON, withComma } from '@/utils/helpers';
+import { fromNow, hexSlicer, WTON, withComma, date2 } from '@/utils/helpers';
 import { getContract } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
 
 import Button from '@/components/Button.vue';
-import TextSmall from '@/components/TextSmall.vue';
+// import TextSmall from '@/components/TextSmall.vue';
 import TextSmallest from '@/components/TextSmallest.vue';
 import TextTime from '@/components/TextTime.vue';
 
 export default {
   components: {
     'election-button': Button,
-    'text-small': TextSmall,
+    // 'text-small': TextSmall,
     'text-smallest': TextSmallest,
     'text-time': TextTime,
   },
@@ -92,6 +93,7 @@ export default {
       'web3',
     ]),
     ...mapGetters([
+      'candidate',
       'isCandidate',
       'isMember',
       'totalVotesForCandidate',
@@ -113,7 +115,10 @@ export default {
       return this.member.candidateContract === this.candidateContractFromEOA ? true : false;
     },
     desc () {
-      return `${hexSlicer(this.member.candidateContract)} was elected as a member on ${this.deployedDate(this.member.info.memberJoinedTime)}`;
+      return `${hexSlicer(this.member.candidateContract)} became a DAO committee member on ${this.deployedDate(this.member.info.memberJoinedTime)}`;
+    },
+    date2 () {
+      return (timestamp) => date2(timestamp);
     },
     deployedDate () {
       return (timestamp) => {
@@ -164,7 +169,7 @@ export default {
             this.challengeInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
-            await this.$store.dispatch('launch');
+            await this.$store.dispatch('candidateLaunch');
             await this.$store.dispatch('connectEthereum', this.web3);
           }
         })
@@ -196,7 +201,7 @@ export default {
             this.retirementInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
-            await this.$store.dispatch('launch');
+            await this.$store.dispatch('candidateLaunch');
             await this.$store.dispatch('connectEthereum', this.web3);
           }
         })
