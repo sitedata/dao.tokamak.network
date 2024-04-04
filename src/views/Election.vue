@@ -300,7 +300,7 @@ export default {
   }
 
   .card-container {
-    margin-top: 45px;
+    margin-top: 50px;
   }
 }
 </style>
