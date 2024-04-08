@@ -8,7 +8,7 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
-             href="https://docs.tokamak.network"
+             href="https://docs.tokamak.network/home/service-guide/staking-and-dao/tokamak-network-dao"
           >
             User Guide
           </a>
