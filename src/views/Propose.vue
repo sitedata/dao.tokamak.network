@@ -347,7 +347,6 @@ export default {
     this.seigManagerFunctionsOfTypeA = getContractABI('SeigManager', 'A');
     this.daoCommitteeProxyFunctionsOfTypeA = getContractABI('DAOCommitteeProxy', 'A');
     this.daoVaultFunctionsOfTypeA = getContractABI('DAOVault', 'A');
-
     this.tonFunctionsOfTypeB = getContractABI('TON', 'B');
     this.wtonFunctionsOfTypeB = getContractABI('WTON', 'B');
     this.depositManagerFunctionsOfTypeB = getContractABI('DepositManager', 'B');
