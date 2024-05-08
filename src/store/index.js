@@ -439,7 +439,7 @@ export default new Vuex.Store({
       }
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
-      console.log(agendaTxs);
+      // console.log(agendaTxs);
       for (let i = 0; i < agendas.length; i++) {
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;

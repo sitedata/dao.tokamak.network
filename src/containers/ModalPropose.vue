@@ -165,8 +165,8 @@ export default {
       if (tonBalanceBN.lt(createAgendaFeeBN)) {
         return alert('Please check your TON amount.');
       }
-      console.log(this.$refs);
-      console.log(this.params);
+      // console.log(this.$refs);
+      // console.log(this.params);
       const nParams = Object.keys(this.$refs).length;
       if (this.params.length !== nParams) {
         console.log('bug'); // eslint-disable-line
@@ -183,7 +183,7 @@ export default {
       if (!setParams) {
         return alert('The parameter value must be set.');
       }
-      console.log(this.functionName);
+      // console.log(this.functionName);
       if (this.functionName === 'setSeigRates') {
         await this.proposeSetSeigRates();
         return;
@@ -203,7 +203,7 @@ export default {
         agendaManager.methods.minimumVotingPeriodSeconds().call(),
         agendaManager.methods.createAgendaFees().call(),
       ]);
-      console.log(this.contract, this.functionName, this.type);
+      // console.log(this.contract, this.functionName, this.type);
       const selector = getFunctionSelector(this.contract, this.functionName, this.type);
 
       const types = [];
