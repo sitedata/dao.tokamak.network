@@ -21,9 +21,6 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]); // eslint-disable-line
 });
 
-// https://api.thegraph.com/subgraphs/name/cd4761/staking-v1-subgraph
-// https://api.thegraph.com/subgraphs/name/cd4761/staking-v1-subgraph-goerli
-
 Vue.prototype.$apollo = apollo;
 
 Vue.use(VueApollo);

@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-boost';
 
 export default new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/cd4761/staking-v1-subgraph-sepolia',
+  uri: 'https://api.studio.thegraph.com/query/77344/staking-v1-subgraph-sepolia/version/latest',
 });
