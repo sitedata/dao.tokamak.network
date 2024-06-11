@@ -532,7 +532,6 @@ export default new Vuex.Store({
           let activityReward;
           if (candidates != null && candidates.length > 0) {
             const agendaVotesByCandidates = state.agendaVotesByCandidates;
-            console.log(agendaVotesByCandidates);
             candidates.forEach(async function (account) {
               activityReward = await committeeProxy.methods.getClaimableActivityReward(account.candidate).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
@@ -542,7 +541,6 @@ export default new Vuex.Store({
                 }
               });
             });
-            console.log(agendaVotesByCandidates);
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates);
             //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
             if (candidates[0] != null) {
@@ -597,7 +595,6 @@ export default new Vuex.Store({
               candidateContract.voteRates = ((candidateContract.countAgendaVote / candidateContract.countCanVoteAgendas) * 100).toFixed(2);
 
           });
-          console.log(myCandidateContracts);
           commit('SET_VOTES_AGENDAS', myCandidateContracts);
         }
       } catch (error) {
