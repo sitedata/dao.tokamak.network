@@ -308,7 +308,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       const candidates = await Promise.all(
@@ -347,6 +347,7 @@ export default new Vuex.Store({
           return candidate;
         }),
       );
+
       const candidatesFiltered = candidates.filter(candidate => candidate.selfVote > 1000000000000000000000000000000);
       commit('SET_CANDIDATES', candidatesFiltered);
 
@@ -381,7 +382,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -406,7 +407,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -438,6 +439,7 @@ export default new Vuex.Store({
       }
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
+      // console.log(agendaTxs);
       for (let i = 0; i < agendas.length; i++) {
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;
@@ -456,7 +458,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       votes.forEach(async function (vote) {
@@ -851,8 +853,8 @@ This function allows you to set the new PowerTON contract as the first parameter
 Execution 2:
 Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
-This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`;
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
         } else if (onChainEffects[0].name === 'upgradeTo' && onChainEffects[1].name === 'setInfo') {
           return `
 Execution 1:
