@@ -429,24 +429,24 @@ export default new Vuex.Store({
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
-      console.log(agendas);
+      // console.log(agendas);
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
-        console.log(txHash);
+        // console.log(txHash);
         promAgendaTx.push(await web3.eth.getTransaction(txHash));
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
-      console.log(promAgendaTx);
+      // console.log(promAgendaTx);
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
-      console.log(agendaTxs);
+      // console.log(agendaTxs);
       for (let i = 0; i < agendas.length; i++) {
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          console.log(agendaTxs[i]);
+          // console.log(agendaTxs[i]);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
