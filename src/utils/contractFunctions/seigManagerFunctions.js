@@ -11,7 +11,7 @@ const seigManagerFunctionsOfTypeA = [
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Currently, TON seigniorage is issued each time a Ethereum block is created.
+`
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,
@@ -28,7 +28,7 @@ This function lets you set the distribution ratio of the 3.92 TON among PowerTON
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Currently, TON seigniorage is issued each time a Ethereum block is created.
+`
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,
@@ -45,7 +45,7 @@ This function lets you set the distribution ratio of the 3.92 TON among PowerTON
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Currently, TON seigniorage is issued each time a Ethereum block is created.
+`
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,

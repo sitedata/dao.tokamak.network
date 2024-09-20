@@ -308,7 +308,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       const candidates = await Promise.all(
@@ -382,7 +382,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -407,7 +407,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -429,23 +429,24 @@ export default new Vuex.Store({
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
-      // console.log(agendas);
+      console.log(agendas);
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
-        // console.log(txHash);
+        console.log(txHash);
         promAgendaTx.push(await web3.eth.getTransaction(txHash));
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
+      console.log(promAgendaTx);
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
-      // console.log(agendaTxs);
+      console.log(agendaTxs);
       for (let i = 0; i < agendas.length; i++) {
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          // console.log(agendaTxs[i]);
+          console.log(agendaTxs[i]);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
@@ -458,7 +459,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       votes.forEach(async function (vote) {
@@ -851,7 +852,7 @@ export default new Vuex.Store({
 This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
 
 Execution 2:
-Currently, TON seigniorage is issued each time a Ethereum block is created.
+
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`;
@@ -878,9 +879,7 @@ dividendPool: ${onChainEffects[1].values[3]}
             onChainEffects[1].name === 'setDaoSeigRate' &&
             onChainEffects[2].name === 'setPseigRate'
         ) {
-          return `Currently, TON seigniorage is issued each time a Ethereum block is created.
-
-3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
+          return `3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`;
         }
       }
