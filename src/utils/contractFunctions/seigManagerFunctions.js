@@ -13,8 +13,8 @@ const seigManagerFunctionsOfTypeA = [
     'explanation':
 `Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
-This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`,
+3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
+This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,
   },
   {
     'params': {
