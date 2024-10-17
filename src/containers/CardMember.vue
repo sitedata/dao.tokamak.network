@@ -148,8 +148,8 @@ export default {
     },
     async challenge () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-      const memberIndex = this.memberIndex;
-      // console.log(memberIndex, this.candidateContractFromEOA);
+      const memberIndex = this.member.memberIndex;
+
       const gasLimit = await candidateContract.methods.changeMember(memberIndex)
         .estimateGas({
           from: this.account,
@@ -181,7 +181,6 @@ export default {
     },
     async retire () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-
       const gasLimit = await candidateContract.methods.retireMember()
         .estimateGas({
           from: this.account,
