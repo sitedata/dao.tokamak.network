@@ -73,6 +73,7 @@ function getContract (want, web3, address) {
   if (!web3) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
   }
+
   const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
   const Layer2 = new web3.eth.Contract(layer2.abi, address);
@@ -87,8 +88,8 @@ function getContract (want, web3, address) {
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
   const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
-  const L1BridgeRegistry = new web3.eth.Contract(l1BridgeRegistry, address);
-  const Layer2Manager = new web3.eth.Contract(layer2Manager, address);
+  const L1BridgeRegistry = new web3.eth.Contract(l1BridgeRegistry.abi, address);
+  const Layer2Manager = new web3.eth.Contract(layer2Manager.abi, address);
 
   const contracts = {
     Candidate,
