@@ -429,7 +429,7 @@ export default new Vuex.Store({
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
-      // console.log(agendas);
+
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
         // console.log(txHash);
@@ -449,7 +449,10 @@ export default new Vuex.Store({
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
-      // console.log(agendas);
+
+      await agendas[2].onChainEffects.map((effect, index) => {
+        console.log(index, effect.name, effect.target, effect.values);
+      });
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
