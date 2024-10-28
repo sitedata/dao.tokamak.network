@@ -2,6 +2,25 @@
   "contractName": "DepositManager",
   "abi": [
     {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "l1BridgeRegistry_",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "layer2Manager_",
+          "type": "address"
+        }
+      ],
+      "name": "SetAddresses",
+      "type": "event"
+    },
+    {
       "inputs": [
         {
           "internalType": "contract WTON",
