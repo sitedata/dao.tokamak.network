@@ -177,6 +177,7 @@ export default {
       'getAgendaNextButtonState',
     ]),
     checkStatus () {
+      console.log(this.agendas);
       const agenda = this.getAgendaByID(this.agendaId);
       const date = new Date();
       if (agenda.status === 2 && agenda.tVotingEndTime * 1000 < date.getTime()) return true;

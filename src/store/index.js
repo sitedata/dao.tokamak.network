@@ -425,7 +425,7 @@ export default new Vuex.Store({
 
       const promAgendaTx = [];
       const promAgendaContents = [];
-
+      console.log(agendas);
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
@@ -449,6 +449,7 @@ export default new Vuex.Store({
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
+      // console.log(agendas);
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
@@ -789,6 +790,7 @@ export default new Vuex.Store({
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
+      // console.log(agendaId, agenda.onChainEffects);
       if (!agenda) {
         return [];
       }
@@ -833,7 +835,6 @@ export default new Vuex.Store({
       }
 
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
-
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';
