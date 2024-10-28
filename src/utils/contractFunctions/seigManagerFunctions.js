@@ -290,6 +290,34 @@ Seigmanager's MInter function for WTON can be removed through this function. It 
     'disabled': false,
     'explanation': 'Initialize L2RewardPerUint to 0. Can only be executed when layer2StartBlock is 0.',
   },
+  {
+    'params': {
+      'aboutParam0': 'address newImplementation: Additional Seig Manager logic contract address to use',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _index: Index address to use',
+      'exampleParam1': '0',
+      'aboutParam2': 'bool _alive: Whether to use that logic or not',
+      'exampleParam2': 'true',
+    },
+    'name': 'setImplementation2',
+    'title': '(Seig Manager) Add logic to use the Seig Manager contract. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'Set the address and index number of the additional logic to be used in the Seig Manager contract, and whether or not to use it.',
+  },
+  {
+    'params': {
+      'aboutParam0': 'bytes4[] _selectors: Selector for functions to be used in additional logic contracts',
+      'exampleParam0': '[0x00000000]',
+      'aboutParam1': 'address _imp: Additional logic contract address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setSelectorImplementations2',
+    'title': '(Seig Manager) Setting up functions to be used in additional logic. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'Setting up functions to be used in additional logic.',
+  },
 ];
 
 module.exports.seigManagerFunctionsOfTypeA = seigManagerFunctionsOfTypeA;

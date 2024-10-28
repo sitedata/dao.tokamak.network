@@ -56,6 +56,36 @@ This function allows you to change the contract, and you can enter the contract 
     'disabled': false,
     'explanation': 'l1BridgeRegistry and layer2Manager addresses are updated.',
   },
+  {
+    'params': {
+      'aboutParam0': 'address newImplementation: Additional Deposit Manager logic contract address to use',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _index: Index address to use',
+      'exampleParam1': '0',
+      'aboutParam2': 'bool _alive: Whether to use that logic or not',
+      'exampleParam2': 'true',
+    },
+    'name': 'setImplementation2',
+    'title': '(Deposit Manager) Add logic to use the Deposit Manager contract. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+'Set the address and index number of the additional logic to be used in the Deposit Manager contract, and whether or not to use it.',
+  },
+  {
+    'params': {
+      'aboutParam0': 'bytes4[] _selectors: Selector for functions to be used in additional logic contracts',
+      'exampleParam0': '[0x00000000]',
+      'aboutParam1': 'address _imp: Additional logic contract address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setSelectorImplementations2',
+    'title': '(Deposit Manager) Setting up functions to be used in additional logic. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+'Setting up functions to be used in additional logic.',
+  },
 //   {
 //     'params': {
 //       'aboutParam0': 'address layer2: Layer2 address',
