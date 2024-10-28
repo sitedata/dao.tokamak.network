@@ -182,6 +182,30 @@ const daoCommitteeFunctionsOfTypeB = [
     'explanation':
   'This function allows the DAO to change the outcome of the agenda regardless of the vote result.',
   },
+  {
+    'params': {
+      'aboutParam0': 'address _candidateAddOnFactory: Set CandidateAddonFactory address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setCandidateAddOnFactory',
+    'title': '(DAO Committee)CandidateAddonFactory will be upgraded.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+  'This function is used when CandidateAddonFactory is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
+  },
+  {
+    'params': {
+      'aboutParam0': 'address _layer2Manager: Set Layer2Manager address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setLayer2Manager',
+    'title': '(DAO Committee)Layer2Manager will be upgraded.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+  'This function is used when Layer2Manager is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
+  },
 ];
 
 module.exports.daoCommitteeFunctionsOfTypeB = daoCommitteeFunctionsOfTypeB;
