@@ -450,9 +450,9 @@ export default new Vuex.Store({
         }
       }
 
-      await agendas[2].onChainEffects.map((effect, index) => {
-        console.log(index, effect.name, effect.target, effect.values);
-      });
+      // await agendas[2].onChainEffects.map((effect, index) => {
+      //   console.log(index, effect.name, effect.target, effect.values);
+      // });
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
