@@ -248,6 +248,48 @@ Seigmanager's MInter function for WTON can be removed through this function. It 
     'explanation':
 'This function allows you to take action when an operator\'s cheating occurs. You can forcibly change the operator of the first parameter (Param1) layer 2 to the second parameter (Param2).',
   },
+  {
+    'params': {
+      'aboutParam0': 'address layer2Manager_: The Layer2Manager address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setLayer2Manager',
+    'title': '(Seig Manager)Layer2Manager will be changed.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'This function allows you to set the new Layer2Manager contract as the parameter.',
+  },
+  {
+    'params': {
+      'aboutParam0': 'address l1BridgeRegistry_: The L1BridgeRegistry address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setL1BridgeRegistry',
+    'title': '(Seig Manager)L1BridgeRegistry will be changed.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'This function allows you to set the new L1BridgeRegistry contract as the parameter.',
+  },
+  {
+    'params': {
+      'aboutParam0': 'uint256 startBlock_: The start block number',
+      'exampleParam0': '0',
+    },
+    'name': 'setLayer2StartBlock',
+    'title': '(Seig Manager)Set the start block of issuing a Layer2 seigniorage',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'Set the start block number of issuing a Layer2 seigniorage',
+  },
+  {
+    'params': {
+    },
+    'name': 'resetL2RewardPerUint',
+    'title': '(Seig Manager)Initialize L2RewardPerUint to zero',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'Initialize L2RewardPerUint to 0. Can only be executed when layer2StartBlock is 0.',
+  },
 ];
 
 module.exports.seigManagerFunctionsOfTypeA = seigManagerFunctionsOfTypeA;

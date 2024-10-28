@@ -43,6 +43,19 @@ const depositManagerFunctionsOfTypeB = [
 `Deposit Manager (user deposit and withdrawal process management during staking) holds a contract to manage seigniorage.
 This function allows you to change the contract, and you can enter the contract address to be changed in the first parameter (Parma1). It will be used when the seigniorage management contract is updated.`,
   },
+  {
+    'params': {
+      'aboutParam0': 'address l1BridgeRegistry_: The L2BridgeRegistry address',
+      'exampleParam0': '0x0000000000000000000000000000000000000001',
+      'aboutParam1': 'address layer2Manager_: The Layer2Mnager address',
+      'exampleParam1': '0x0000000000000000000000000000000000000002',
+    },
+    'name': 'setAddresses',
+    'title': '(Deposit Manager)Set l1BridgeRegistry and layer2Manager addresses.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'l1BridgeRegistry and layer2Manager addresses are updated.',
+  },
 //   {
 //     'params': {
 //       'aboutParam0': 'address layer2: Layer2 address',
