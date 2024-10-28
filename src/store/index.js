@@ -425,7 +425,7 @@ export default new Vuex.Store({
 
       const promAgendaTx = [];
       const promAgendaContents = [];
-      console.log(agendas);
+
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
