@@ -45,9 +45,9 @@ This function allows you to change the contract, and you can enter the contract 
   },
   {
     'params': {
-      'aboutParam0': 'address l1BridgeRegistry_: The L2BridgeRegistry address',
+      'aboutParam0': 'address _l1BridgeRegistry: The L2BridgeRegistry address',
       'exampleParam0': '0x0000000000000000000000000000000000000001',
-      'aboutParam1': 'address layer2Manager_: The Layer2Mnager address',
+      'aboutParam1': 'address _layer2Manager: The Layer2Mnager address',
       'exampleParam1': '0x0000000000000000000000000000000000000002',
     },
     'name': 'setAddresses',
