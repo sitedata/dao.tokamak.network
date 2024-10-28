@@ -3,7 +3,7 @@ const l1BridgeRegistryFunctionsOfTypeA = [
     'params': {
       'aboutParam0': 'address rollupConfig: the rollupConfig address',
       'exampleParam0': '100000000000000000000000000',
-      'aboutParam1': 'uint256 _type: the rollup\'s type, 1: legacy, 2: optimism bedrock with the native TON',
+      'aboutParam1': 'uint8 _type: the rollup\'s type, 1: legacy, 2: optimism bedrock with the native TON',
       'exampleParam1': '1',
       'aboutParam2': `address _l2TON: the L2 TON address.
                  if _type equals 2,  _l2TON should be '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000'`,
@@ -21,7 +21,7 @@ const l1BridgeRegistryFunctionsOfTypeA = [
     'params': {
       'aboutParam0': 'address rollupConfig: the rollupConfig address',
       'exampleParam0': '100000000000000000000000000',
-      'aboutParam1': 'uint256 _type: the rollup\'s type, 1: legacy, 2: optimism bedrock with the native TON',
+      'aboutParam1': 'uint8 _type: the rollup\'s type, 1: legacy, 2: optimism bedrock with the native TON',
       'exampleParam1': '1',
       'aboutParam2': `address _l2TON: the L2 TON address.
                  if _type equals 2,  _l2TON should be '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000'`,
@@ -92,7 +92,7 @@ const l1BridgeRegistryFunctionsOfTypeB = [
     'params': {
       'aboutParam0': 'address rollupConfig: the rollupConfig address',
       'exampleParam0': '100000000000000000000000000',
-      'aboutParam1': 'uint256 _type: the rollup\'s type, 1: legacy, 2: optimism bedrock with the native TON',
+      'aboutParam1': 'uint8 _type: the rollup\'s type, 1: legacy, 2: optimism bedrock with the native TON',
       'exampleParam1': '1',
       'aboutParam2': `address _l2TON: the L2 TON address.
                  if _type equals 2,  _l2TON should be '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000'`,
