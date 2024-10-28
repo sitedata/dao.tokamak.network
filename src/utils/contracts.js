@@ -26,6 +26,8 @@ const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
 const refactorCoinageSnapshot = require('../contracts/RefactorCoinageSnapshot.json');
+const l1BridgeRegistry = require('../contracts/L1BridgeRegistryV1_1.json');
+const layer2Manager = require('../contracts/Layer2ManagerV1_1.json');
 
 const {
   daoCommitteeFunctionsOfTypeB,
@@ -41,6 +43,9 @@ const {
   seigManagerFunctionsOfTypeA,
   seigManagerFunctionsOfTypeB,
   tonFunctionsOfTypeB,
+  l1BridgeRegistryFunctionsOfTypeA,
+  l1BridgeRegistryFunctionsOfTypeB,
+  layer2ManagerFunctionsOfTypeB,
 } = require('@/utils/contractFunctions/index.js');
 
 const { wtonFunctionsOfTypeB } = require('./contractFunctions/wtonFunctions');
@@ -60,6 +65,8 @@ const deployed = {
   'CandidateFactory': '0x04e3C2B720FB8896A7f9Ea59DdcA85fD45189C7f',
   'DAOCommittee': '0x79cfbEaCB5470bBe3B8Fe76db2A61Fc59e588C38',
   'DAOCommitteeProxy': '0xA2101482b28E3D99ff6ced517bA41EFf4971a386',
+  'L1BridgeRegistry': '0x3268e4D8276c58A806E83B3B080Cf29514A837cf',
+  'Layer2Manager': '0xab303E7CBFd19C998268e19d830770e215AbDF7F',
 };
 
 function getContract (want, web3, address) {
@@ -80,6 +87,8 @@ function getContract (want, web3, address) {
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
   const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
+  const L1BridgeRegistry = new web3.eth.Contract(l1BridgeRegistry, address);
+  const Layer2Manager = new web3.eth.Contract(layer2Manager, address);
 
   const contracts = {
     Candidate,
@@ -96,6 +105,8 @@ function getContract (want, web3, address) {
     Coinage,
     Layer2Registry,
     Tot,
+    L1BridgeRegistry,
+    Layer2Manager,
   };
 
   if (want) {
@@ -111,6 +122,7 @@ const depositManagerABIOfTypeA = [];
 const seigManagerABIOfTypeA = [];
 const daoCommitteeProxyABIOfTypeA = [];
 const daoVaultABIOfTypeA = [];
+const l1BridgeRegistryABIOfTypeA = [];
 
 const tonABIOfTypeB = [];
 const wtonABIOfTypeB = [];
@@ -122,6 +134,8 @@ const daoCommitteeABIOfTypeB = [];
 const daoVaultABIOfTypeB = [];
 const powerTonProxyABIOfTypeB = [];
 const powerTonLogicABIOfTypeB = [];
+const l1BridgeRegistryABIOfTypeB = [];
+const layer2ManagerABIOfTypeB = [];
 
 (() => {
   const set = (functions, abis, abi) => {
@@ -142,6 +156,7 @@ const powerTonLogicABIOfTypeB = [];
   set(seigManagerFunctionsOfTypeA, seigManagerABIOfTypeA, seigManager.abi);
   set(daoCommitteeProxyFunctionsOfTypeA, daoCommitteeProxyABIOfTypeA, committee.abi);
   set(daoVaultFunctionsOfTypeA, daoVaultABIOfTypeA, daoVault.abi);
+  set(l1BridgeRegistryFunctionsOfTypeA, l1BridgeRegistryABIOfTypeA, l1BridgeRegistry.abi);
 
   set(tonFunctionsOfTypeB, tonABIOfTypeB, ton.abi);
   set(wtonFunctionsOfTypeB, wtonABIOfTypeB, wton.abi);
@@ -153,6 +168,8 @@ const powerTonLogicABIOfTypeB = [];
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
   set(powerTonProxyFunctionsOfTypeB, powerTonProxyABIOfTypeB, powerTONProxy.abi);
   set(powerTonLogicFunctionsOfTypeB, powerTonLogicABIOfTypeB, powerTONLogic.abi);
+  set(l1BridgeRegistryFunctionsOfTypeB, l1BridgeRegistryABIOfTypeB, l1BridgeRegistry.abi);
+  set(layer2ManagerFunctionsOfTypeB, layer2ManagerABIOfTypeB, layer2Manager.abi);
 })();
 
 module.exports.getContractABI = function (want, type = 'A') {
@@ -163,6 +180,7 @@ module.exports.getContractABI = function (want, type = 'A') {
     else if (want === 'SeigManager') return seigManagerABIOfTypeA;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeA;
     else if (want === 'DAOVault') return daoVaultABIOfTypeA;
+    else if (want === 'L1BridgeRegistry') return l1BridgeRegistryABIOfTypeA;
     else return [];
   } else {
     if (want === 'TON') return tonABIOfTypeB;
@@ -175,6 +193,8 @@ module.exports.getContractABI = function (want, type = 'A') {
     else if (want === 'DAOVault') return daoVaultABIOfTypeB;
     else if (want === 'PowerTONProxy') return powerTonProxyABIOfTypeB;
     else if (want === 'PowerTONLogic') return powerTonLogicABIOfTypeB;
+    else if (want === 'L1BridgeRegistry') return l1BridgeRegistryABIOfTypeB;
+    else if (want === 'Layer2Manager') return layer2ManagerABIOfTypeB;
     else return [];
   }
 };
@@ -190,6 +210,7 @@ module.exports.getContractABIFromAddress = function (address, type) {
     else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
+    else if (address === deployed.L1BridgeRegistry.toLowerCase()) return l1BridgeRegistryABIOfTypeA;
     else return [];
   } else if (type === 'B') {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
@@ -203,6 +224,8 @@ module.exports.getContractABIFromAddress = function (address, type) {
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeB;
     else if (address === deployed.PowerTONProxy.toLowerCase()) return powerTonProxyABIOfTypeB;
+    else if (address === deployed.L1BridgeRegistry.toLowerCase()) return l1BridgeRegistryABIOfTypeB;
+    else if (address === deployed.Layer2Manager.toLowerCase()) return layer2ManagerABIOfTypeB;
     else return [];
   } else {
     console.log('bug', 'no type'); // eslint-disable-line
@@ -227,6 +250,9 @@ module.exports.getFunctionSelector = function (contract, want, type) {
     else if (contract === 'DAOVault') {
       return (daoVaultABIOfTypeA.find(f => f.name === want)).selector;
     }
+    else if (contract === 'L1BridgeRegistry') {
+      return (l1BridgeRegistryABIOfTypeA.find(f => f.name === want)).selector;
+    }
     else {
       return '';
     }
@@ -241,6 +267,8 @@ module.exports.getFunctionSelector = function (contract, want, type) {
     else if (contract === 'DAOVault') return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'PowerTONProxy') return (powerTonProxyABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'PowerTONLogic') return (powerTonLogicABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'L1BridgeRegistry') return (l1BridgeRegistryABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'Layer2Manager') return (layer2ManagerABIOfTypeB.find(f => f.name === want)).selector;
     else return '';
   } else {
     return '';
@@ -320,6 +348,9 @@ const getABIFromSelector = function (selector, type) {
     abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
+    abi = l1BridgeRegistryABIOfTypeA.find(abi => abi.selector === selector);
+    if (abi) return abi;
+
   } else if (type === 'B') {
     abi = tonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
@@ -351,6 +382,11 @@ const getABIFromSelector = function (selector, type) {
     abi = powerTonLogicABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
+    abi = l1BridgeRegistryABIOfTypeB.find(abi => abi.selector === selector);
+    if (abi) return abi;
+
+    abi = layer2ManagerABIOfTypeB.find(abi => abi.selector === selector);
+    if (abi) return abi;
     if (!abi) {
       console.log('bug'); // eslint-disable-line
     }

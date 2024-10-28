@@ -44,6 +44,15 @@ const {
   wtonFunctionsOfTypeB,
 } = require('./wtonFunctions');
 
+const {
+  l1BridgeRegistryFunctionsOfTypeA,
+  l1BridgeRegistryFunctionsOfTypeB,
+} = require('./l1BridgeRegistryFunctions');
+
+const {
+  layer2ManagerFunctionsOfTypeB,
+} = require('./layer2ManagerFunctions');
+
 module.exports = {
   daoCommitteeFunctionsOfTypeA,
   daoCommitteeFunctionsOfTypeB,
@@ -61,4 +70,7 @@ module.exports = {
   seigManagerFunctionsOfTypeB,
   tonFunctionsOfTypeB,
   wtonFunctionsOfTypeB,
+  l1BridgeRegistryFunctionsOfTypeA,
+  l1BridgeRegistryFunctionsOfTypeB,
+  layer2ManagerFunctionsOfTypeB,
 };
