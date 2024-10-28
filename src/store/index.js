@@ -450,7 +450,7 @@ export default new Vuex.Store({
         }
       }
 
-      // await agendas[2].onChainEffects.map((effect, index) => {
+      // await agendas[4].onChainEffects.map((effect, index) => {
       //   console.log(index, effect.name, effect.target, effect.values);
       // });
       commit('SET_AGENDAS', agendas);
@@ -844,7 +844,7 @@ export default new Vuex.Store({
       }
 
       const abiFound = abi.find(a => a.name === onChainEffects[0].name);
-      return abiFound.title;
+      return abiFound ? abiFound.title : '';
     },
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);

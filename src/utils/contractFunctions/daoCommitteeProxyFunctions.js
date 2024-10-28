@@ -207,7 +207,7 @@ It will be used when the DAO is upgraded.`,
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Set the address and index number of the additional logic to be used in the DAO contract, and whether or not to use it.`,
+'Set the address and index number of the additional logic to be used in the DAO contract, and whether or not to use it.',
   },
   {
     'params': {
@@ -221,7 +221,7 @@ It will be used when the DAO is upgraded.`,
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Setting up functions to be used in additional logic.`,
+'Setting up functions to be used in additional logic.',
   },
 ];
 

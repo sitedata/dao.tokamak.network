@@ -374,10 +374,11 @@ module.exports.parseAgendaBytecode = function (tx, type) {
     if (targets.length !== commands.length) {
       console.log('bug'); // eslint-disable-line
     }
-
+    // console.log(targets.length, commands.length);
     const onChainEffects = [];
     for (let i = 0; i < targets.length; i++) {
       const selector = commands[i].slice(0, 10);
+      // console.log(targets.length, selector, type);
       let abi = getABIFromSelector(selector, type);
       if (!abi) {
         abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
@@ -396,6 +397,7 @@ module.exports.parseAgendaBytecode = function (tx, type) {
 
       const target = targets[i];
       const name = abi.name;
+
       const types = [];
       abi.inputs.forEach(input => {
         types.push(input.type);
