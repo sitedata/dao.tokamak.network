@@ -429,7 +429,7 @@ export default new Vuex.Store({
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
-      // console.log(agendas);
+
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
         // console.log(txHash);
@@ -799,6 +799,7 @@ export default new Vuex.Store({
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
+      // console.log(agendaId, agenda.onChainEffects);
       if (!agenda) {
         return [];
       }
@@ -843,14 +844,13 @@ export default new Vuex.Store({
       }
 
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
-
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';
       }
 
       const abiFound = abi.find(a => a.name === onChainEffects[0].name);
-      return abiFound.title;
+      return abiFound ? abiFound.title : '';
     },
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
@@ -861,7 +861,6 @@ export default new Vuex.Store({
 This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
 
 Execution 2:
-
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`;
@@ -888,7 +887,9 @@ dividendPool: ${onChainEffects[1].values[3]}
             onChainEffects[1].name === 'setDaoSeigRate' &&
             onChainEffects[2].name === 'setPseigRate'
         ) {
-          return `3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
+          return `Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`;
         }
       }

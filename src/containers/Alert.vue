@@ -31,6 +31,7 @@ export default {
       if (typeof window.ethereum !== 'undefined') {
         // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-chainid-deprecated
         const chainId = await ethereum.request({ method: 'eth_chainId' });
+
         if (chainId === this.chainId || chainId === this.decentChainId) {
           this.alert = '';
         } else {

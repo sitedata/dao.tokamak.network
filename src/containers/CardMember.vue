@@ -181,7 +181,6 @@ export default {
     },
     async retire () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-
       const gasLimit = await candidateContract.methods.retireMember()
         .estimateGas({
           from: this.account,

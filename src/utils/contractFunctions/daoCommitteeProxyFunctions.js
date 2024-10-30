@@ -180,6 +180,49 @@ If the first Param1 value is true, DAO stops, and if it is false, it operates no
 `This function sets the new address of the DAO contract to be upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).
 It will be used when the DAO is upgraded.`,
   },
+  {
+    'params': {
+      'aboutParam0': 'address impl: New DAO Logic contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'upgradeTo2',
+    'title': '(DAO Committee Proxy2)Address of the DAO logic contract will be upgraded. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+`This function sets the new address of the DAO logic contract to be upgraded. Enter the DAO logic contract address to be upgraded in the first parameter (Param1).
+It will be used when the DAO is upgraded.`,
+  },
+  {
+    'params': {
+      'aboutParam0': 'address newImplementation: Additional DAO logic contract address to use',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _index: Index address to use',
+      'exampleParam1': '0',
+      'aboutParam2': 'bool _alive: Whether to use that logic or not',
+      'exampleParam2': 'true',
+    },
+    'name': 'setImplementation2',
+    'title': '(DAO Committee Proxy2) Add logic to use the DAO contract. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+'Set the address and index number of the additional logic to be used in the DAO contract, and whether or not to use it.',
+  },
+  {
+    'params': {
+      'aboutParam0': 'bytes4[] _selectors: Selector for functions to be used in additional logic contracts',
+      'exampleParam0': '[0x00000000]',
+      'aboutParam1': 'address _imp: Additional logic contract address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setSelectorImplementations2',
+    'title': '(DAO Committee Proxy2) Setting up functions to be used in additional logic. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation':
+'Setting up functions to be used in additional logic.',
+  },
 ];
 
 module.exports.daoCommitteeProxyFunctionsOfTypeA = daoCommitteeProxyFunctionsOfTypeA;
