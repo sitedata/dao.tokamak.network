@@ -450,7 +450,16 @@ export default new Vuex.Store({
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
-      commit('SET_AGENDAS', agendas);
+
+      const uniqueArr = agendas.filter((agenda, idx) => {
+        return (
+          agendas.findIndex((agenda1) => {
+            return agenda.agendaid === agenda1.agendaid;
+          }) === idx
+        );
+      });
+
+      commit('SET_AGENDAS', uniqueArr);
       await dispatch('setVoteAgendas');
     },
     async setVotingDetails ({ state, commit }) {
