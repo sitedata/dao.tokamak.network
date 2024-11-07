@@ -20,9 +20,11 @@
                 ? { minWidth: '95px' }
                 : menu.title === 'L2 Mainnet'
                   ? { minWidth: '120px' }
-                  : menu.title === 'Bridge & Swap'
-                    ? { minWidth: '142px' } : menu.title === 'Launchpad'? '130px'
-                      : {},
+                  : menu.title === 'L2 Mainnet'
+                    ? { minWidth: '120px' }
+                    : menu.title === 'Bridge & Swap'
+                      ? { minWidth: '142px' } : menu.title === 'Launchpad'? '130px'
+                        : {},
           menu.isFoucsed ? { fontWeight: 600 } : {},
           menu.isFoucsed ? { opacity: 1 } : { opacity: 0.25 },
           index === menus.length - 1 ? { marginRight: '31%' } : {},
@@ -59,6 +61,11 @@ export default {
         {
           title: 'L2 Mainnet',
           url: 'http://titan.tokamak.network/',
+          isFoucsed: false,
+        },
+        {
+          title: 'L2 On-Demand',
+          url: 'http://rolluphub.tokamak.network/',
           isFoucsed: false,
         },
         {
