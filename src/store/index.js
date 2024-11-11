@@ -312,7 +312,7 @@ export default new Vuex.Store({
       }
 
       const candidates = await Promise.all(
-        candi.map(async candidate => {
+        candi?.map(async candidate => {
           const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
           const [
             isRegistered, coinage, lastCommitBlockNumber,
