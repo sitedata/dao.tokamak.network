@@ -286,7 +286,6 @@ export default new Vuex.Store({
 
       const candi = response.data.candidates;
       const [
-        // c,
         maxMember,
       ] = await Promise.all([
         // getCandidates(),
